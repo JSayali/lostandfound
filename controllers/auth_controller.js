@@ -3,7 +3,6 @@ var passport=require('passport')
 , LocalStrategy = require('passport-local').Strategy;
 var session = require("express-session");
 Users=mongoose.model('Users');
-Groups=mongoose.model('Groups');
 
 
 exports.login=function(req,res) {
@@ -30,8 +29,7 @@ exports.login=function(req,res) {
       status=200;
       message=usersession.user;
      }
-     //console.log(status)
-      // If credentials are correct, return the user object
+
      res.json(status,{message:message});
     });
 }

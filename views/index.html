@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Log in</title>
+    <title>Lost & Found App</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -18,8 +18,14 @@
     <link rel="stylesheet" href="libraries/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
+
     <link rel="stylesheet" href="libraries/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/jquery.slidepanel.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <!-- jQuery 2.2.0 -->
+    <script src="libraries/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,23 +36,24 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini" ng-controller="lostandfoundController">
 <div ng-include src="content" include-replace ></div>
-<div id='slider' ng-model="id">
-    Please Fill out the Form to add Item Lost/Found in {{id}}
+<div id='slider' ng-model="id" style="padding:20px 10px 0 10px; border:1px inset darkgray;background-color:#ecf0f5">
+    <div><b>Please fill out the form to add lost/found item at {{id}}</b></div>
+    <hr>
     <form>
-        <fieldset class="form-group">
+        <fieldset class="form-group" style="padding-top: 10px;">
             <label for="name">Item Name</label>
-            <input type="text" class="form-control" id="name" ng-model="name" placeholder="Enter Name" >
+            <input type="text" class="form-control" id="name" ng-model="name" maxlength="20" placeholder="Enter Name" >
         </fieldset>
 
         <fieldset class="form-group">
             <label for="description">Description</label>
-            <textarea class="form-control" id="description" ng-model="description"  rows="3"></textarea>
+            <textarea class="form-control" id="description" ng-model="description" maxlength="200" rows="3"></textarea>
         </fieldset>
 
-        <fieldset class="form-group">
-            <label for="exampleInputEmail1">Date</label>
-            <input type="date" class="form-control" ng-model="date">
-        </fieldset>
+        <!--<fieldset class="form-group">
+            <label for="date">Date</label>
+            <input type="date" class="form-control" id="date" ng-model="date">
+        </fieldset>-->
         <div class="radio">
             <label>
                 <input type="radio" ng-model="lf" name="optionsRadios" id="optionsRadios1" value="Lost" checked>
@@ -59,18 +66,18 @@
                 Found
             </label>
         </div>
-        <button type="submit" class="btn btn-primary" ng-click="myFun()" >Submit</button>
+        <button type="submit" class="btn btn-primary center-block" ng-click="myFun()" >Submit</button>
+        <button type="reset" value="Reset" id="reset" style="display:none">Reset</button>
     </form>
 </div>
 <button id='trigger' style="display:none">Trigger</button>
 
+
 <!-- /.login-box -->
-
+<script type="text/javascript" src="javascripts/jquery.rwdImageMaps.min.js"></script>
 <!-- ./wrapper -->
-<!-- jQuery 2.2.0 -->
-<script src="libraries/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <script src="../javascripts/notify.js"></script>
-
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 
@@ -103,6 +110,7 @@
 <script src="../javascripts/jquery.slidepanel.js"></script>
 <script type="text/javascript" src="javascripts/jquery.slidepanel.js"></script>
 
+<!--<script type="text/javascript" src="javascripts/imageMapResizer.min.js"></script>-->
 
 </body>
 </html>

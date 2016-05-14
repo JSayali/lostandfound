@@ -1,15 +1,15 @@
-var express = require("express"),cmd
-    http = require("http");
+var express = require("express"),
+http = require("http");
 var path = require('path');
 var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/lostandfound')
+var db = mongoose.connect('mongodb://localhost/lostandfound');
 var bodyParser = require("body-parser");
-var passport = require('passport')
+var passport = require('passport');
 var cookieParser = require("cookie-parser");
 var request = require("request");
-
-require('./models/tweet_model.js');
-var LostandFound=mongoose.model('LostandFound');
+var onlineusers = {};
+require('./models/lnf_model.js');
+var LostandFound = mongoose.model('LostandFound');
 
 var session = require('express-session');
 
@@ -33,38 +33,43 @@ require('./routes/index')(app, passport);
 io.on('connection', function(socket) {
 
 
-	socket.on('addItem',function(msg){
+    socket.on('addItem', function(msg) {
 
-		lf=new LostandFound(msg);
+        lf = new LostandFound(msg);
 
-		lf.save();
+        lf.save();
 
+        io.emit('itemAdded', lf);
 
-		io.emit('itemAdded', lf);
+        if (lf.found) {
+            LostandFound.find({
+                found: true
+            }, function(err, founditems) {
+                if (err) return console.error(err);
+                io.emit('updateFoundcount', founditems);
+            });
+        } else {
+            LostandFound.find({
+                lost: true
+            }, function(err, lostitems) {
+                if (err) return console.error(err);
+                io.emit('updateLostCount', lostitems);
+            });
+        }
 
-		if(lf.found)
-		{
-		LostandFound.find({found:true},function(err, founditems) {
-	  	if (err) return console.error(err);
-	  	io.emit('updateFoundcount',founditems);
-	  	});
-		}
-		else
-		{
-		LostandFound.find({lost:true},function(err, lostitems) {
-	  	if (err) return console.error(err);
-	  	io.emit('updateLostCount',lostitems);
-	  	});
-		}
+    });
+
+    socket.on('onlineuser', function(user) {
+
+        onlineusers[user] = socket;
+    });
+
+    socket.on('textMsg', function(sender, reciever, msg) {
+        var socketid = onlineusers[reciever];
+        socketid.emit('sendMsg', sender, msg);
+    });
 
 });
-
-		
-
-
-	});
-
-
 
 server.listen(8000);
 console.log("Server started on port:8000");
