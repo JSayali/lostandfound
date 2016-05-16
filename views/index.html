@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="libraries/dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/jquery.slidepanel.css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="stylesheets/pop-up.css">
     <!-- jQuery 2.2.0 -->
     <script src="libraries/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 
@@ -36,24 +37,25 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini" ng-controller="lostandfoundController">
 <div ng-include src="content" include-replace ></div>
-<div id='slider' ng-model="id" style="padding:20px 10px 0 10px; border:1px inset darkgray;background-color:#ecf0f5">
-    <div><b>Please fill out the form to add lost/found item at {{id}}</b></div>
+<div id='slider' ng-model="id" style="padding:40px 10px 0 10px; border:1px inset darkgray;background-color:#ecf0f5">
+    <div><b>Please fill out the form to add information about item lost/found at {{id}}</b></div>
     <hr>
-    <form>
+    <form name="detailsForm">
         <fieldset class="form-group" style="padding-top: 10px;">
-            <label for="name">Item Name</label>
-            <input type="text" class="form-control" id="name" ng-model="name" maxlength="20" placeholder="Enter Name" >
+            <label for="name">What's the item ?</label>
+            <input type="text" class="form-control" id="name" ng-model="name" maxlength="20" placeholder="Enter Name" required>
         </fieldset>
 
         <fieldset class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control" id="description" ng-model="description" maxlength="200" rows="3"></textarea>
+            <label for="description">Can you please describe it?</label>
+            <textarea class="form-control" id="description" ng-model="description" maxlength="200" rows="3" required></textarea>
         </fieldset>
 
-        <!--<fieldset class="form-group">
-            <label for="date">Date</label>
-            <input type="date" class="form-control" id="date" ng-model="date">
-        </fieldset>-->
+        <fieldset class="form-group">
+            <label for="date">When did you lose/find it?</label>
+            <input type="date" class="form-control" id="date" ng-model="date" required>
+        </fieldset>
+
         <div class="radio">
             <label>
                 <input type="radio" ng-model="lf" name="optionsRadios" id="optionsRadios1" value="Lost" checked>
@@ -66,15 +68,20 @@
                 Found
             </label>
         </div>
-        <button type="submit" class="btn btn-primary center-block" ng-click="myFun()" >Submit</button>
+        <div style="margin-top: 30px;">
+            <button id="formSubmit" type="submit" class="btn btn-primary" style="margin: 0 10px 0 30px;" ng-disabled="!detailsForm.$valid">Submit</button>
+            <button class="btn btn-primary" style="margin: 0 20px 0 10px;" id="cancelForm">Cancel</button>
+        </div>
+
+
         <button type="reset" value="Reset" id="reset" style="display:none">Reset</button>
     </form>
 </div>
+<div id="popups"></div>
 <button id='trigger' style="display:none">Trigger</button>
+<button class="hide" id="addClass">Hidden</button>
 
 
-<!-- /.login-box -->
-<script type="text/javascript" src="javascripts/jquery.rwdImageMaps.min.js"></script>
 <!-- ./wrapper -->
 <script src="../javascripts/notify.js"></script>
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -108,6 +115,7 @@
 <script src="libraries/plugins/iCheck/icheck.min.js"></script>
 
 <script src="../javascripts/jquery.slidepanel.js"></script>
+<!--<script src="../javascripts/ngStorage.min.js"></script>-->
 <script type="text/javascript" src="javascripts/jquery.slidepanel.js"></script>
 
 <!--<script type="text/javascript" src="javascripts/imageMapResizer.min.js"></script>-->

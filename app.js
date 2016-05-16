@@ -58,10 +58,48 @@ io.on('connection', function(socket) {
         }
 
     });
+    socket.on('logout', function(data){
+        if(!socket.nickname) return;
+        delete onlineusers[socket.nickname];
 
-    socket.on('onlineuser', function(user) {
+    });
+    socket.on("postDelete", function(data){
+       io.emit("delete post", data);
+    });
+    socket.on('send message', function(receiver, data, callback){
+        var msg = data.trim();
+        console.log('after trimming message is: ' + msg);
+        if(receiver in onlineusers){
+            onlineusers[receiver].emit('message', {msg: msg, nick: socket.nickname, rec: receiver});
+            socket.emit("new message", {msg: msg, nick: socket.nickname, rec: receiver});
+            console.log('message sent is: ' + msg);
 
-        onlineusers[user] = socket;
+        } else{
+            callback('Error!  Enter a valid user.');
+        }
+    });
+    socket.on('onlineuser', function(data, callback){
+        if (data in onlineusers){
+            callback(false);
+        } else{
+            callback(true);
+            socket.nickname = data;
+            onlineusers[socket.nickname] = socket;
+        }
+    });
+    socket.on("check friend", function (friend, callback) {
+        console.log("friend is "+friend);
+        if(friend in onlineusers){
+            console.log("friend found");
+            console.log(socket.nickname);
+            onlineusers[friend].emit("open window", {name: socket.nickname});
+            callback(true);
+        }
+        else{
+            callback(false);
+            console.log("friend not found");
+        }
+
     });
 
     socket.on('textMsg', function(sender, reciever, msg) {

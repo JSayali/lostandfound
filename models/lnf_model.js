@@ -1,13 +1,14 @@
 var mongoose = require('mongoose');
 
-Schema = mongoose.Schema;
+Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
 
-// Document schema for polls
 var userSchema = new mongoose.Schema({
 	firstname:String,
 	lastname:String,
 	user_name: String,
-	password:String
+	password:String,
+	likes: [ObjectId]
 });
 
 mongoose.model('Users',userSchema);
@@ -20,7 +21,9 @@ var lostandfoundSchema=new mongoose.Schema({
 	date:Date,
 	lost:Boolean,
 	found:Boolean,
-	user:String
+	user:String,
+    date_posted: Date,
+    date_formated: String
 });
 
 mongoose.model('LostandFound',lostandfoundSchema);

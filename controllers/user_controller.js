@@ -26,7 +26,48 @@ exports.register=function(req,res){
             }
         });
 }
+exports.updateLikes = function(req, res){
+    console.log(req.body.id);
+    console.log(req.body.user);
+    Users.update({
+            "user_name": req.body.user
+        }, {
+            $addToSet: {
+                "likes": (req.body.id)
+            }
+        },
+        function(err, rep) {
+            if (err !== null) {
+                // return from the function
+                return;
+            } else {
+                if (rep.nModified === 0) {
+                    Users.update({
+                            "user_name": req.body.user
+                        }, {
+                            $pull: {
+                                "likes": (req.body.id)
+                            }
+                        },
+                        function(err, rep) {
+                            if (err !== null) {
+                                return;
+                            } else {
+                                //do nothing
+                            }
 
+                        });
+                    res.send({
+                        "success": false
+                    });
+                }else{
+                    res.send({"success": true});
+                }
+
+            }
+        });
+
+}
 exports.editProfile=function(req,res){
 
     Users.findOne({user_name: req.body.username })
