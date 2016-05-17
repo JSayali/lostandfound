@@ -63,8 +63,23 @@ io.on('connection', function(socket) {
         delete onlineusers[socket.nickname];
 
     });
-    socket.on("postDelete", function(data){
-       io.emit("delete post", data);
+    socket.on("postDelete", function(data, lOrf){
+       io.emit("delete post", data, lOrf);
+        if (lOrf == "foundcount") {
+            LostandFound.find({
+                found: true
+            }, function(err, founditems) {
+                if (err) return console.error(err);
+                io.emit('updateFoundcount', founditems);
+            });
+        } else {
+            LostandFound.find({
+                lost: true
+            }, function(err, lostitems) {
+                if (err) return console.error(err);
+                io.emit('updateLostCount', lostitems);
+            });
+        }
     });
     socket.on('send message', function(receiver, data, callback){
         var msg = data.trim();

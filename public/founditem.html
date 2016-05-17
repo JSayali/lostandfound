@@ -1,17 +1,24 @@
 <div class="row">
     <!-- Content Header (Page header) -->
-    <section class="content-header" style="margin-bottom: 40px">
-        <div style="float: left; margin-left: 30px; font-size: large">Timeline</div>
-        <input ng-model="query" placeholder="Search" style="width: 30%; float: right; margin: 0 30px 30px 0">
+    <section class="content-header">
+        <div style="float: left; margin-left: 30px;font-size: large">Timeline</div>
+        <!--<div style="float: left; margin-left: 30px;"><h3>Timeline</h3></div>-->
+        <!--<input ng-model="query" placeholder="Search" style="width: 30%; float: right; margin: 0 30px 30px 0">-->
+        <div class="input-group" style="width: 40%; float: right; margin: 0 30px 30px 0">
+            <span class="input-group-addon">
+                <i class="glyphicon glyphicon-search"></i>
+            </span>
+            <input type="text" ng-model="query" class="form-control" placeholder="Search"/>
+        </div>
     </section>
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="margin:50px 30px 0 30px;">
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
                 <!-- The time line -->
-                <div ng-show="founditems.length==0">
-                    No lost item entries to display
+                <div ng-show="foundCount==0">
+                    <div class="alert alert-info" role="alert">Nothing's been found yet!</div> <!--style="padding: 10px 0 10px 0;"-->
                 </div>
                 <ul class="timeline">
                     <!-- timeline time label -->
@@ -24,8 +31,8 @@
                             <span class="time"><i class="fa fa-clock-o"></i> {{item.date_formated}}</span>
                             <h3 class="timeline-header"><a href="#">{{item.user}}</a> found {{item.name}} at {{item.location}}</h3>
                             <div class="timeline-body">
-                                {{item.description}}
-                                {{item.date}}
+                                <div>Item Description: {{item.description}}</div>
+                                <div>Found on {{item.date}}</div>
                             </div>
                             <div class="timeline-footer">
                                 <button ng-hide="item.user==username" class="btn btn-warning btn-flat btn-xs contact">Contact <span>{{item.user}}</span></button>

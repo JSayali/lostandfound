@@ -20,10 +20,10 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!-- Messages: style can be found in dropdown.less-->
-                    
+
                     <!-- Notifications: style can be found in dropdown.less -->
-                   
-                        
+
+
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -70,28 +70,27 @@
                 </div>
             </div>
             <!-- search form -->
-           
+
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="header">Lost & Found</li>
-                <li class="active treeview">
+                <li class="treeview" ng-class="{active : pageTitle === 'Lost and Found Map'}">
                     <a href="#" ng-click="setUniversity('/university.html')">
-                        <i class="fa fa-dashboard" ></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
+                        <i class="fa fa-circle-o"></i><span>Lost and Found Map</span>
                     </a>
+                </li>
+                <li class="treeview" ng-class="{active : pageTitle === 'Lost Items'}">
+                    <a href="#" ng-click="setUniversity('/lostitem.html')">
+                        <i class="fa fa-circle-o"></i><span>Lost Items</span>
+                    </a>
+                </li>
+                <li class="treeview" ng-class="{active : pageTitle === 'Found Items'}">
+                    <a href="#" ng-click="setUniversity('/founditem.html')">
+                        <i class="fa fa-circle-o"></i><span>Found Items</span>
+                    </a>
+                </li>
 
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-pie-chart"></i>
-                        <span>Lost and Found</span>
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#" ng-click="setUniversity('/lostitem.html')"><i class="fa fa-circle-o"></i> Lost an item</a></li>
-                        <li><a href="#" ng-click="setUniversity('/founditem.html')"><i class="fa fa-circle-o"></i> Found an item</a></li>
-                    </ul>
-                </li>
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -100,7 +99,7 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
-        <section class="content-header">
+        <!--<section class="content-header">
             <h1>
                 Dashboard
                 <small></small>
@@ -109,7 +108,7 @@
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li class="active">Dashboard</li>
             </ol>
-        </section>
+        </section>-->
 
         <!-- Main content -->
         <section class="content">
@@ -178,12 +177,12 @@
     </div>
     <!-- /.content-wrapper -->
 
-    <footer class="main-footer">
+    <!--<footer class="main-footer">
         <div class="pull-right hidden-xs">
-           
+
         </div>
 
-    </footer>
+    </footer>-->
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">

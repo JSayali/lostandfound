@@ -18,7 +18,7 @@ var lostandfoundSchema=new mongoose.Schema({
 	location:String,
 	name:String,
 	description:String,
-	date:Date,
+	date:String,
 	lost:Boolean,
 	found:Boolean,
 	user:String,

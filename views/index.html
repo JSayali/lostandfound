@@ -6,6 +6,9 @@
     <title>Lost & Found App</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href='https://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
+
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="libraries/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -45,29 +48,42 @@
             <label for="name">What's the item ?</label>
             <input type="text" class="form-control" id="name" ng-model="name" maxlength="20" placeholder="Enter Name" required>
         </fieldset>
+        <div class="error">
+            <span ng-show="detailsForm.name.$error.required && detailsForm.name.$dirty">Required</span>
+        </div>
 
         <fieldset class="form-group">
             <label for="description">Can you please describe it?</label>
             <textarea class="form-control" id="description" ng-model="description" maxlength="200" rows="3" required></textarea>
         </fieldset>
+        <div class="error">
+            <span ng-show="detailsForm.description.$error.required && detailsForm.description.$dirty">Required</span>
+        </div>
 
         <fieldset class="form-group">
             <label for="date">When did you lose/find it?</label>
             <input type="date" class="form-control" id="date" ng-model="date" required>
         </fieldset>
+        <div class="error">
+            <span ng-show="detailsForm.date.$error.required && detailsForm.date.$dirty">Required</span>
+        </div>
 
         <div class="radio">
             <label>
-                <input type="radio" ng-model="lf" name="optionsRadios" id="optionsRadios1" value="Lost" checked>
+                <input type="radio" ng-model="lf" name="optionsRadios" id="optionsRadios1" value="Lost" ng-required="!lf">
                 Lost
             </label>
         </div>
         <div class="radio">
             <label>
-                <input type="radio"  ng-model="lf" name="optionsRadios" id="optionsRadios2" value="Found">
+                <input type="radio"  ng-model="lf" name="optionsRadios" id="optionsRadios2" ng-required="!lf" value="Found">
                 Found
             </label>
         </div>
+        <div class="error">
+            <span ng-show="detailsForm.lf.$error.required && detailsForm.lf.$dirty">Required</span>
+        </div>
+
         <div style="margin-top: 30px;">
             <button id="formSubmit" type="submit" class="btn btn-primary" style="margin: 0 10px 0 30px;" ng-disabled="!detailsForm.$valid">Submit</button>
             <button class="btn btn-primary" style="margin: 0 20px 0 10px;" id="cancelForm">Cancel</button>

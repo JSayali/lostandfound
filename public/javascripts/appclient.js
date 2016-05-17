@@ -24,6 +24,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
     $scope.clickMe = function(ddd) {
 
         $scope.id = ddd.target.title;
+
         $("#slider").slideReveal("show");
         $("#exampleInputEmail1").val($scope.id);
 
@@ -39,15 +40,15 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
         $('#date').attr('max', maxDate);
 
-
     };
 
 
     $http.get('/checkSession')
         .success(function(data, status, headers, config) {
             data = data["message"];
-
+            $scope.likes = data.likes;
             $scope.username = data.user_name;
+            console.log("likes: "+$scope.likes);
             $scope.content = "/profile.html";
 
         })
@@ -165,12 +166,12 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     };
 
-
     $scope.setContent = function(content) {
 
         $scope.content = content;
     }
     $scope.setUniversity = function(page) {
+
         if(page=="/lostitem.html"){
             $scope.pageTitle = "Lost Items";
         }
@@ -195,22 +196,27 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     $scope.postDelete = function(itemId){
         console.log("item is: "+itemId);
-
+        var lOrf = "foundcount";
+        console.log("page title: "+$scope.pageTitle);
+        if($scope.pageTitle=="Lost Items")
+        {
+            lOrf = "lostcount";
+        }
         $http.post("/postDelete",{item: itemId})
             .success(function(data){
                 if(data.success){
-                    socket.emit("postDelete", itemId, function(data){
+                    socket.emit("postDelete", itemId, lOrf, function(data){
                     })
                 }
                 console.log(data);
             });
     };
-    socket.on("delete post", function(data){
+    socket.on("delete post", function(data, lOrf){
         var li = "#"+data;
-        /*$(""+li+"").remove();*/
         $(""+li+"").fadeOut(1600, function() {
             $(""+li+"").remove();
         });
+
     });
     socket.on('new message', function(data){
         var msgPanel = "#qnimate"+data.rec;
@@ -229,28 +235,28 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     /*$scope.myFun = function() {
 
-        var lost = false;
-        var found = false;
+     var lost = false;
+     var found = false;
 
-        if ($scope.lf === "Found")
-            found = true;
-        else
-            lost = true;
+     if ($scope.lf === "Found")
+     found = true;
+     else
+     lost = true;
 
-        var data = {
-            location: $scope.id,
-            name: $scope.name,
-            description: $scope.description,
-            date: $scope.date,
-            lost: lost,
-            found: found,
-            user: $scope.username,
-            date_posted: new Date(),
-            date_formated: getDate()
-        };
-        $scope.detailsForm.$setPristine();
-        socket.emit('addItem', data);
-    };*/
+     var data = {
+     location: $scope.id,
+     name: $scope.name,
+     description: $scope.description,
+     date: $scope.date,
+     lost: lost,
+     found: found,
+     user: $scope.username,
+     date_posted: new Date(),
+     date_formated: getDate()
+     };
+     $scope.detailsForm.$setPristine();
+     socket.emit('addItem', data);
+     };*/
 
     $("#formSubmit").on("click", function(){
         var lost = false;
@@ -265,16 +271,17 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             location: $scope.id,
             name: $scope.name,
             description: $scope.description,
-            date: $scope.date,
+            date: getDate($scope.date),
             lost: lost,
             found: found,
             user: $scope.username,
             date_posted: new Date(),
-            date_formated: getDate()
+            date_formated: getDate(new Date())
         };
         $scope.detailsForm.$setPristine();
         socket.emit('addItem', data);
     });
+
     socket.on('updateFoundcount', function(msg) {
         $scope.founditems = msg;
         $scope.foundCount = msg.length;
@@ -303,12 +310,18 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     $("#cancelForm").on("click", function () {
         $("#reset").click();
+        $scope.detailsForm.$setPristine();
         $("#slider").slideReveal("hide");
     });
 
     socket.on('itemAdded', function(msg) {
 
         $("#reset").click();
+
+        $scope.name = "";
+        $scope.description = "";
+        $scope.date = "";
+        $scope.lf = "";
 
         $("#slider").slideReveal("hide");
 
@@ -335,9 +348,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         html += "Contact <span>" + msg.user + "</span></button>";
         html += "<a class='postStar' href='#' ng-model='item.star' ng-click='update(item._id); item.star=!item.star;'>";
         html += "<i ng-class='{'fa fa-heart':item.star,'fa fa-heart-o':!item.star}'></i></a></div></div></li>";
-        console.log(html);
-        /*var temp = $compile(html)($scope);
-         angular.element(document.getElementById('.timeline')).prepend(temp);*/
+
         $(".timeline").prepend(html);
         $(".timeline :first-child").slideDown();
 
@@ -371,27 +382,14 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
     }
 
     /*Get today's date*/
-    function getDate() {
-        var d = new Date();
+    function getDate(date) {
+        var d = date;
         var month = d.getMonth() + 1;
         var day = d.getDate();
         var output = GetMonthName(month) + " " + day + ", " + d.getFullYear();
         return output;
     }
-    /*$scope.contact = function(user){
-     var to = user;
-     var from = $scope.username;
 
-     socket.emit("check friend", to, function(data){
-
-     if(data){
-     $("#addClass").trigger("click", [to]);
-     }
-     else {
-     $.notify(to+" is not online. Please try again later.", "alert");
-     }
-     });
-     };*/
     $("body").delegate(".contact", "click",function(){
         var to = ($(this).find("span").html()).trim();
         var from = $scope.username;
@@ -416,7 +414,6 @@ $(document).ready(function() {
         trigger: $("#trigger"),
         position: "right"
     });
-
 
 });
 
