@@ -21,3 +21,7 @@ a {
 
 .right-addon .glyphicon { right: 0px;}
 .right-addon input { padding-right: 30px; }
+
+.description {
+    font-style: italic;
+}

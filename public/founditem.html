@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <!-- The time line -->
                 <div ng-show="foundCount==0">
-                    <div class="alert alert-info" role="alert">Nothing's been found yet!</div> <!--style="padding: 10px 0 10px 0;"-->
+                    <div class="alert alert-info" role="alert">Nothing's been found yet!</div>
                 </div>
                 <ul class="timeline">
                     <!-- timeline time label -->
@@ -29,10 +29,10 @@
                         <i class="fa fa-comments bg-yellow"></i>
                         <div class="timeline-item">
                             <span class="time"><i class="fa fa-clock-o"></i> {{item.date_formated}}</span>
-                            <h3 class="timeline-header"><a href="#">{{item.user}}</a> found {{item.name}} at {{item.location}}</h3>
+                            <h3 class="timeline-header">{{item.user}} found {{item.name}} at {{item.location}}</h3>
                             <div class="timeline-body">
-                                <div>Item Description: {{item.description}}</div>
-                                <div>Found on {{item.date}}</div>
+                                <div><em>Item Description: {{item.description}}</em></div>
+                                <div><em>Found on {{item.date}}</em></div>
                             </div>
                             <div class="timeline-footer">
                                 <button ng-hide="item.user==username" class="btn btn-warning btn-flat btn-xs contact">Contact <span>{{item.user}}</span></button>

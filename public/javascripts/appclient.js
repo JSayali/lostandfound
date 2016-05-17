@@ -192,6 +192,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             var msgPanel = "#qnimate"+to;
             $(""+msgPanel+"").find(".panel-body").append("Sorry! User is not online. Please try again later.");
         });
+        $(this).parent().siblings().val("");
     });
 
     $scope.postDelete = function(itemId){
@@ -221,11 +222,22 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
     socket.on('new message', function(data){
         var msgPanel = "#qnimate"+data.rec;
         $(""+msgPanel+"").find(".panel-body").append(createBase_sent(data.msg, data.nick));
+        $('.msg_container_base').animate({
+            scrollTop: $('.msg_container_base').get(0).scrollHeight}, 2000);
     });
 
     socket.on('message', function(data){
         var msgPanel = "#qnimate"+data.nick;
+        if(($(""+msgPanel+"")).length<=0){
+            $("#addClass").trigger("click", [data.nick]);
+        }
+        else if(($(""+msgPanel+"")).length>0){
+            /*$("#addClass").trigger("click", [data.nick]);*/
+            $(""+msgPanel+"").addClass("popup-box-on");
+        }
         $(""+msgPanel+"").find(".panel-body").append(createBase_receive(data.msg, data.nick));
+        $('.msg_container_base').animate({
+            scrollTop: $('.msg_container_base').get(0).scrollHeight}, 2000);
     });
     socket.on("open window", function(data){
         $("#addClass").trigger("click", [data.name]);

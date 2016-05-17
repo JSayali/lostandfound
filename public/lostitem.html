@@ -27,11 +27,11 @@
                     <li ng-repeat="item in lostitems | orderBy:'-date_posted' | filter: query " id="{{item._id}}">
                         <i class="fa fa-comments bg-yellow"></i>
                         <div class="timeline-item">
-                            <span class="time"><i class="fa fa-clock-o"></i>{{item.date_formated}}</span>
-                            <h3 class="timeline-header"><a href="#">{{item.user}}</a> lost {{item.name}} at {{item.location}}</h3>
+                            <span class="time"><i class="fa fa-clock-o"></i>  {{item.date_formated}}</span>
+                            <h3 class="timeline-header">{{item.user}} lost {{item.name}} at {{item.location}}</h3>
                             <div class="timeline-body">
-                                <div>Item Description: {{item.description}}</div>
-                                <div>Lost on {{item.date}}</div>
+                                <div><em>Item Description: {{item.description}}</em></div>
+                                <div><em>Lost on {{item.date}}</em></div>
                             </div>
                             <div class="timeline-footer">
                                 <button ng-hide="item.user==username" class="btn btn-warning btn-flat btn-xs contact">Contact <span>{{item.user}}</span></button>
