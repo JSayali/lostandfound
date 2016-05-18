@@ -1,17 +1,54 @@
-body {
-    padding: 50px;
+body, h3, h1, h2, .logoStyle {
+    /*padding: 50px;*/
     /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
     font-family: 'Anton', sans-serif;
 }
 
-a {
+/*a {
     color: #00B7FF;
+}*/
+.textOverflow {
+    word-wrap:break-word;
 }
-/* enable absolute positioning */
+.formPadding {
+    padding-top: 10px;
+}
+
+#slider {
+    padding:40px 10px 0 10px;
+    border:1px inset darkgray;
+    background-color:#ecf0f5;
+}
+.formFooter {
+    margin-top: 30px;
+}
+#formSubmit {
+    margin: 0 10px 0 30px;
+}
+#reset, #trigger, #panel1 {
+    display: none;
+}
+#cancelForm {
+    margin: 0 20px 0 10px;
+}
 .inner-addon {
     position: relative;
 }
-
+.logoCustom {
+    font-weight: bold;
+    text-decoration: underline;
+}
+.lbStyle {
+    border: 1px inset cornflowerblue;
+    padding: 10px;
+    background-color: #ecf0f5;
+}
+.logoStyle {
+    font-weight: bold;
+}
+.lbbStyle {
+    background-color: inherit;
+}
 /* style icon */
 .inner-addon .glyphicon {
     position: absolute;
