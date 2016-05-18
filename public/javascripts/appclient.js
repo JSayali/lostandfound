@@ -1,7 +1,7 @@
 'use strict';
-var app = angular.module('lostandfoundapp',["ngStorage"]);
+var app = angular.module('lostandfoundapp',[]);
 
-app.controller('lostandfoundController', ['$scope', '$http', '$window', function($scope, $http, $localStorage) {
+app.controller('lostandfoundController', ['$scope', '$http', '$window', function($scope, $http) {
 
     var socket = io();
 
@@ -42,12 +42,15 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     };
 
-    //console.log("user: "+$localStorage.username);
+    $scope.editProfile=function(){
+        $scope.university="/editProfile.html";
+    }
 
     $http.get('/checkSession')
         .success(function(data, status, headers, config) {
             data = data["message"];
             /*$scope.likes = data.likes;*/
+            socket.emit("updateSocket", data.user_name);
             $scope.username = data.user_name;
             $scope.content = "/profile.html";
 
@@ -70,17 +73,32 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             });
 
     };
+
+    $scope.saveProfile=function(){
+
+        var username=$("#username").val();
+        var password=$("#password").val();
+
+        console.log(username);
+
+        $http.post("/editProfile",{username: username,password:password})
+            .success(function(data){
+                $.notify(data.message,"success");
+            });
+
+    };
+
     /*$scope.update = function(id){
 
-        var data ={
-            id: id,
-            user: $scope.username
-        };
-        $http.post("/updateLikes", data)
-            .success(function(data){
-                console.log(data);
-            });
-    };*/
+     var data ={
+     id: id,
+     user: $scope.username
+     };
+     $http.post("/updateLikes", data)
+     .success(function(data){
+     console.log(data);
+     });
+     };*/
     $scope.login = function() {
 
         var data = {
@@ -98,35 +116,11 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             socket.emit('onlineuser', $scope.username, function (data) {
             });
             $scope.content = "/profile.html";
-            /*updateFoundStars();
-            updateLostStars();*/
 
         }).error(function(data, status, headers, config) {
             $.notify(data.message, "alert");
         });
     };
-    /*function updateLostStars(){
-        ($scope.lostitems).forEach(function(d){
-            if(($scope.likes).indexOf(d._id)!==-1){
-                d.star = true;
-            }
-            else{
-                d.star = false;
-            }
-        });
-        $scope.lostitems = $scope.lostitems;
-    }
-    function updateFoundStars(){
-        ($scope.founditems).forEach(function(d){
-            if(($scope.likes).indexOf(d._id)!==-1){
-                d.star = true;
-            }
-            else{
-                d.star = false;
-            }
-        });
-        $scope.founditems = $scope.founditems;
-    }*/
     $scope.register = function() {
 
         var uname = $("#email").val();
@@ -232,6 +226,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     });
     socket.on('new message', function(data){
+
         var msgPanel = "#qnimate"+data.rec;
         $(""+msgPanel+"").find(".panel-body").append(createBase_sent(data.msg, data.nick));
         $('.msg_container_base').animate({
@@ -251,6 +246,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             scrollTop: $('.msg_container_base').get(0).scrollHeight}, 2000);
     });
     socket.on("open window", function(data){
+        console.log("open window");
         $("#addClass").trigger("click", [data.name]);
         var popup = "#qnimate"+data.name;
 
@@ -335,13 +331,12 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         var html = "";
         html += "<li style='display:none'><i class='fa fa-comments bg-yellow'></i>";
         html += "<div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i>" + msg.date;
-        html += "</span><h3 class='timeline-header'><a ng-model='user' href='#'>" + msg.user + "</a> "+lostfound+" " + msg.name;
+        html += "</span><h3 class='timeline-header'>" + msg.user + " "+lostfound+" " + msg.name;
         html += " at " + msg.location + "</h3>";
-        html += "<div class='timeline-body'>" + msg.description + "</div><div class='timeline-footer'><button ng-hide='username==user' " +
-            "class='btn btn-warning btn-flat btn-xs contact'>";
+        html += "<div class='timeline-body textOverflow'><div><em>" + msg.description + "</em></div>";
+        html += "<div><em>Found on "+msg.date+"</em></div>";
+        html += "</div><div class='timeline-footer'><button ng-hide='username==user' class='btn btn-warning btn-flat btn-xs contact'>";
         html += "Contact <span>" + msg.user + "</span></button>";
-       /* html += "<a class='postStar' href='#' ng-model='item.star' ng-click='update(item._id); item.star=!item.star;'>";
-        html += "<i ng-class='{'fa fa-heart':item.star,'fa fa-heart-o':!item.star}'></i></a></div></div></li>";*/
 
         $(".timeline").prepend(html);
         $(".timeline :first-child").slideDown();
@@ -387,9 +382,9 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
     $("body").delegate(".contact", "click",function(){
         var to = ($(this).find("span").html()).trim();
         var from = $scope.username;
-
+        console.log(to);
         socket.emit("check friend", to, function(data){
-
+            console.log(data);
             if(data){
                 $("#addClass").trigger("click", [to]);
             }
@@ -413,7 +408,8 @@ $(document).ready(function() {
 function createBase_sent(data, user){
     var dt = new Date();
     var time = dt.getHours() + ":" + dt.getMinutes();
-    var base_sent = "<div class=\"row msg_container base_sent\"> <div class=\"col-md-10 col-xs-10\"> <div class=\"messages msg_sent\"> " +
+    var base_sent = "<div class=\"row msg_container base_sent\"> <div class=\"col-md-10 col-xs-10\">" +
+        "<div class=\"messages msg_sent\"> " +
         "<p>"+data+"</p><time datetime=\"2009-11-13T20:00\">"+user+" at "+time+"</time></div></div>";
     return base_sent;
 }
@@ -432,7 +428,8 @@ function createPopup(friend){
     var popup = "<div class=\"popup-box chat-popup\" id=\""+popup_id+"\">" +
         "<div class=\"row chat-window col-xs-5 col-md-3\">" +
         "<div class=\"panel panel-default\"><div class=\"panel-heading top-bar\"><div class=\"col-md-8 col-xs-8\">" +
-        "<h3 class=\"panel-title\"><span class=\"glyphicon glyphicon-comment\"></span><span class=\"user\"></span></h3></div>" +
+        "<h3 class=\"panel-title\"><span class=\"glyphicon glyphicon-comment\">" +
+        "</span><span class=\"user\"></span></h3></div>" +
         "<div class=\"col-md-4 col-xs-4\" style=\"text-align: right;\">" +
         "<a href=\"#\"><span class=\"glyphicon glyphicon-minus icon_minim minim_chat_window\"></span></a>" +
         "<a href=\"#\"><span class=\"glyphicon glyphicon-remove icon_close\"></span></a></div></div>" +

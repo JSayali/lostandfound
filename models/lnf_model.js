@@ -8,7 +8,6 @@ var userSchema = new mongoose.Schema({
 	lastname:String,
 	user_name: String,
 	password:String
-	/*likes: [ObjectId]*/
 });
 
 mongoose.model('Users',userSchema);

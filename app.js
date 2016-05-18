@@ -93,9 +93,16 @@ io.on('connection', function(socket) {
             callback('Error!  Enter a valid user.');
         }
     });
+    socket.on("updateSocket", function(username){
+        socket.nickname = username;
+        onlineusers[username]=socket;
+
+    });
     socket.on('onlineuser', function(data, callback){
         if (data in onlineusers){
             callback(false);
+        /*if(typeof onlineusers[data]==undefined){
+            onlineusers[data]=socket;*/
         } else{
             callback(true);
             socket.nickname = data;
