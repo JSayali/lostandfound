@@ -1,17 +1,22 @@
-'use strict';
-var app = angular.module('lostandfoundapp',[]);
+// Client-side code
+/* jshint browser: true, jquery: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, trailing    : true */
+// Server-side code
+/* jshint node: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, trailing: true */
+"use strict";
 
-app.controller('lostandfoundController', ['$scope', '$http', '$window', function($scope, $http) {
+var app = angular.module("lostandfoundapp", []);
+
+app.controller("lostandfoundController", ["$scope", "$http", "$window", function($scope, $http) {
 
     var socket = io();
 
     $scope.pageTitle = "Campus Map";
 
-    $scope.university = '/university.html';
+    $scope.university = "/university.html";
 
-    $scope.content = '/login.html';
+    $scope.content = "/login.html";
 
-    $scope.latest = '/latestmember.html';
+    $scope.latest = "/latestmember.html";
 
     $scope.chat = "/chat.html";
 
@@ -32,24 +37,28 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         var month = today.getMonth() + 1;
         var day = today.getDate();
         var year = today.getFullYear();
-        if(month < 10)
-            month = '0' + month.toString();
-        if(day < 10)
-            day = '0' + day.toString();
-        var maxDate = year + '-' + month + '-' + day;
+        if (month < 10) {
 
-        $('#date').attr('max', maxDate);
+            month = "0" + month.toString();
+        }
+        if (day < 10) {
+
+            day = "0" + day.toString();
+        }
+        var maxDate = year + "-" + month + "-" + day;
+
+        $("#date").attr("max", maxDate);
 
     };
 
-    $scope.editProfile=function(){
-        $scope.university="/editProfile.html";
-    }
+    $scope.editProfile = function() {
+        $scope.university = "/editProfile.html";
+    };
 
-    $http.get('/checkSession')
+    $http.get("/checkSession")
         .success(function(data, status, headers, config) {
             data = data["message"];
-            /*$scope.likes = data.likes;*/
+
             socket.emit("updateSocket", data.user_name);
             $scope.username = data.user_name;
             $scope.content = "/profile.html";
@@ -62,10 +71,10 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         $("#slider").slideReveal("hide");
         socket.emit("logout");
         $("#popups").html("");
-        $http.get('/logout')
+        $http.get("/logout")
             .success(function(data, status, headers, config) {
                 $scope.content = "/login.html";
-                $scope.university = '/university.html';
+                $scope.university = "/university.html";
 
             })
             .error(function(data, status, headers, config) {
@@ -74,31 +83,21 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     };
 
-    $scope.saveProfile=function(){
+    $scope.saveProfile = function() {
 
-        var username=$("#username").val();
-        var password=$("#password").val();
+        var username = $("#username").val();
+        var password = $("#password").val();
 
-        console.log(username);
-
-        $http.post("/editProfile",{username: username,password:password})
-            .success(function(data){
-                $.notify(data.message,"success");
+        $http.post("/editProfile", {
+                username: username,
+                password: password
+            })
+            .success(function(data) {
+                $.notify(data.message, "success");
             });
 
     };
 
-    /*$scope.update = function(id){
-
-     var data ={
-     id: id,
-     user: $scope.username
-     };
-     $http.post("/updateLikes", data)
-     .success(function(data){
-     console.log(data);
-     });
-     };*/
     $scope.login = function() {
 
         var data = {
@@ -106,15 +105,13 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             password: $("#password").val()
         };
 
-        $http.post('/login', data).success(function(data, status) {
+        $http.post("/login", data).success(function(data, status) {
 
             data = data["message"];
 
             $scope.username = data.user_name;
-            /*$scope.likes = data.likes;*/
 
-            socket.emit('onlineuser', $scope.username, function (data) {
-            });
+            socket.emit("onlineuser", $scope.username, function(data) {});
             $scope.content = "/profile.html";
 
         }).error(function(data, status, headers, config) {
@@ -127,16 +124,15 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         var pswrd = $("#password").val();
         var pswrd_c = $("#password_c").val();
 
-        if(pswrd!==pswrd_c){
+        if (pswrd !== pswrd_c) {
             $.notify("Passwords do not match", "alert");
-        }
-        else {
+        } else {
             var data = {
                 username: uname,
                 password: pswrd
             };
 
-            $http.post('/register', data).success(function(data, status) {
+            $http.post("/register", data).success(function(data, status) {
 
                 $.notify(data.message, "success");
 
@@ -149,118 +145,100 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             });
         }
 
-    }
-
-    $scope.sendtext = function() {
-
-        var message = $("#message").val();
-        var sender = $scope.username;
-        var reciever = "admin";
-        var html = "";
-
-        html += "<div class='direct-chat-msg right'><div class='direct-chat-info clearfix'>";
-        html += "<span class='direct-chat-name pull-left'>" + sender + "</span>";
-        html += "<span class='direct-chat-timestamp pull-right'>23 Jan 2:00 pm</span></div>";
-        html += "<img class='direct-chat-img' src='libraries/dist/img/user1-128x128.jpg' alt='message user image'>";
-        html += "<div class='direct-chat-text'>" + message + "</div></div>";
-
-        $(".direct-chat-messages").append(html);
-
-        socket.emit('textMsg', sender, reciever, message);
-
     };
+
 
     $scope.setContent = function(content) {
 
         $scope.content = content;
-    }
+    };
+
     $scope.setUniversity = function(page) {
 
-        if(page=="/lostitem.html"){
+        if (page === "/lostitem.html") {
             $scope.pageTitle = "Lost Items";
-        }
-        else if(page=="/founditem.html"){
+        } else if (page === "/founditem.html") {
             $scope.pageTitle = "Found Items";
-        }
-        else{
+        } else {
             $scope.pageTitle = "Campus Map";
         }
         $scope.university = page;
     };
-    $("body").delegate(".send-chat", "click", function(e){
+    $("body").delegate(".send-chat", "click", function(e) {
 
         var to = $(this).parent().parent().parent().siblings(".top-bar").find("span.user").html();
         var msg = $(this).parent().siblings().val();
 
-        socket.emit('send message', to, msg, function(data){
-            var msgPanel = "#qnimate"+to;
-            $(""+msgPanel+"").find(".panel-body").append("Sorry! "+to+" is not online. Please try again later.");
-            $('.msg_container_base').animate({
-                scrollTop: $('.msg_container_base').get(0).scrollHeight}, 2000);
+        socket.emit("send message", to, msg, function(data) {
+            var msgPanel = "#qnimate" + to;
+            $("" + msgPanel + "").find(".panel-body").append("Sorry! " + to + " is not online. Please try again later.");
+            $(".msg_container_base").animate({
+                scrollTop: $(".msg_container_base").get(0).scrollHeight
+            }, 2000);
         });
         $(this).parent().siblings().val("");
     });
 
-    $scope.postDelete = function(itemId){
+    $scope.postDelete = function(itemId) {
 
         var lOrf = "foundcount";
 
-        if($scope.pageTitle=="Lost Items")
-        {
+        if ($scope.pageTitle === "Lost Items") {
             lOrf = "lostcount";
         }
-        $http.post("/postDelete",{item: itemId})
-            .success(function(data){
-                if(data.success){
-                    socket.emit("postDelete", itemId, lOrf, function(data){
-                    })
+        $http.post("/postDelete", {
+                item: itemId
+            })
+            .success(function(data) {
+                if (data.success) {
+                    socket.emit("postDelete", itemId, lOrf, function(data) {});
                 }
-                console.log(data);
             });
     };
-    socket.on("delete post", function(data, lOrf){
-        var li = "#"+data;
-        $(""+li+"").fadeOut(1600, function() {
-            $(""+li+"").remove();
+    socket.on("delete post", function(data, lOrf) {
+        var li = "#" + data;
+        $("" + li + "").fadeOut(1600, function() {
+            $("" + li + "").remove();
         });
 
     });
-    socket.on('new message', function(data){
+    socket.on("new message", function(data) {
 
-        var msgPanel = "#qnimate"+data.rec;
-        $(""+msgPanel+"").find(".panel-body").append(createBase_sent(data.msg, data.nick));
-        $('.msg_container_base').animate({
-            scrollTop: $('.msg_container_base').get(0).scrollHeight}, 2000);
+        var msgPanel = "#qnimate" + data.rec;
+        $("" + msgPanel + "").find(".panel-body").append(createBase_sent(data.msg, data.nick));
+        $(".msg_container_base").animate({
+            scrollTop: $(".msg_container_base").get(0).scrollHeight
+        }, 2000);
     });
 
-    socket.on('message', function(data){
-        var msgPanel = "#qnimate"+data.nick;
-        if(($(""+msgPanel+"")).length<=0){
+    socket.on("message", function(data) {
+        var msgPanel = "#qnimate" + data.nick;
+        if (($("" + msgPanel + "")).length <= 0) {
             $("#addClass").trigger("click", [data.nick]);
+        } else if (($("" + msgPanel + "")).length > 0) {
+            $("" + msgPanel + "").addClass("popup-box-on");
         }
-        else if(($(""+msgPanel+"")).length>0){
-            $(""+msgPanel+"").addClass("popup-box-on");
-        }
-        $(""+msgPanel+"").find(".panel-body").append(createBase_receive(data.msg, data.nick));
-        $('.msg_container_base').animate({
-            scrollTop: $('.msg_container_base').get(0).scrollHeight}, 2000);
+        $("" + msgPanel + "").find(".panel-body").append(createBase_receive(data.msg, data.nick));
+        $(".msg_container_base").animate({
+            scrollTop: $(".msg_container_base").get(0).scrollHeight
+        }, 2000);
     });
-    socket.on("open window", function(data){
-        console.log("open window");
+    socket.on("open window", function(data) {
         $("#addClass").trigger("click", [data.name]);
-        var popup = "#qnimate"+data.name;
 
     });
 
-    $("#formSubmit").on("click", function(){
+    $("#formSubmit").on("click", function() {
         var lost = false;
         var found = false;
 
-        if ($scope.lf === "Found")
-            found = true;
-        else
-            lost = true;
+        if ($scope.lf === "Found") {
 
+            found = true;
+        } else {
+
+            lost = true;
+        }
         var data = {
             location: $scope.id,
             name: $scope.name,
@@ -273,38 +251,36 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             date_formated: getDate(new Date())
         };
         $scope.detailsForm.$setPristine();
-        socket.emit('addItem', data);
+        socket.emit("addItem", data);
     });
 
-    socket.on('updateFoundcount', function(msg) {
+    socket.on("updateFoundcount", function(msg) {
         $scope.founditems = msg;
         $scope.foundCount = msg.length;
         $("#fcount").hide();
         $("#fcount").html(msg.length);
-        $("#fcount").slideDown("slow", function(){
-        });
+        $("#fcount").slideDown("slow", function() {});
 
     });
-    socket.on('updateLostCount', function(msg) {
+    socket.on("updateLostCount", function(msg) {
         $scope.lostitems = msg;
         $scope.lostCount = msg.length;
         $("#lcount").hide();
         $("#lcount").html(msg.length);
-        $("#lcount").slideDown("slow", function(){
-        });
+        $("#lcount").slideDown("slow", function() {});
     });
 
-    $(function () {
+    $(function() {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
 
-    $("#cancelForm").on("click", function () {
+    $("#cancelForm").on("click", function() {
         $("#reset").click();
         $scope.detailsForm.$setPristine();
         $("#slider").slideReveal("hide");
     });
 
-    socket.on('itemAdded', function(msg) {
+    socket.on("itemAdded", function(msg) {
 
         $("#reset").click();
 
@@ -327,14 +303,13 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         }
 
         var str = msg.name + " " + lostfound + " at " + msg.location;
-
         var html = "";
-        html += "<li style='display:none'><i class='fa fa-comments bg-yellow'></i>";
-        html += "<div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i>" + msg.date;
-        html += "</span><h3 class='timeline-header'>" + msg.user + " "+lostfound+" " + msg.name;
+        html += "<li id='" + msg._id + "' style='display:none'><i class='fa fa-comments bg-yellow'></i>";
+        html += "<div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i>" + msg.date_formated;
+        html += "</span><h3 class='timeline-header'>" + msg.user + " " + lostfound + " " + msg.name;
         html += " at " + msg.location + "</h3>";
-        html += "<div class='timeline-body textOverflow'><div><em>" + msg.description + "</em></div>";
-        html += "<div><em>Found on "+msg.date+"</em></div>";
+        html += "<div class='timeline-body textOverflow'><div><em>Item Description: " + msg.description + "</em></div>";
+        html += "<div><em>Found on " + msg.date + "</em></div>";
         html += "</div><div class='timeline-footer'><button ng-hide='username==user' class='btn btn-warning btn-flat btn-xs contact'>";
         html += "Contact <span>" + msg.user + "</span></button>";
 
@@ -345,9 +320,9 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     });
 
-    $http.get('/getAllLostItems')
+    $http.get("/getAllLostItems")
         .success(function(data, status, headers, config) {
-            $scope.lostitems = data['message'];
+            $scope.lostitems = data["message"];
             $scope.lostCount = data["message"].length;
 
         })
@@ -355,9 +330,9 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             $.notify(data.message, "Error");
         });
 
-    $http.get('/getAllFoundItems')
+    $http.get("/getAllFoundItems")
         .success(function(data, status, headers, config) {
-            $scope.founditems = data['message'];
+            $scope.founditems = data["message"];
             $scope.foundCount = data["message"].length;
         })
         .error(function(data, status, headers, config) {
@@ -379,17 +354,14 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         return output;
     }
 
-    $("body").delegate(".contact", "click",function(){
+    $("body").delegate(".contact", "click", function() {
         var to = ($(this).find("span").html()).trim();
         var from = $scope.username;
-        console.log(to);
-        socket.emit("check friend", to, function(data){
-            console.log(data);
-            if(data){
+        socket.emit("check friend", to, function(data) {
+            if (data) {
                 $("#addClass").trigger("click", [to]);
-            }
-            else {
-                $.notify(to+" is not online. Please try again later.", "alert");
+            } else {
+                $.notify(to + " is not online. Please try again later.", "alert");
             }
         });
     });
@@ -405,27 +377,27 @@ $(document).ready(function() {
     });
 });
 
-function createBase_sent(data, user){
+function createBase_sent(data, user) {
     var dt = new Date();
     var time = dt.getHours() + ":" + dt.getMinutes();
     var base_sent = "<div class=\"row msg_container base_sent\"> <div class=\"col-md-10 col-xs-10\">" +
         "<div class=\"messages msg_sent\"> " +
-        "<p>"+data+"</p><time datetime=\"2009-11-13T20:00\">"+user+" at "+time+"</time></div></div>";
+        "<p>" + data + "</p><time datetime=\"2009-11-13T20:00\">" + user + " at " + time + "</time></div></div>";
     return base_sent;
 }
 
-function createBase_receive(data, user){
+function createBase_receive(data, user) {
     var dt = new Date();
     var time = dt.getHours() + ":" + dt.getMinutes();
     var base_receive = "<div class=\"row msg_container base_receive\">" +
-        "<div class=\"col-md-10 col-xs-10\"><div class=\"messages msg_receive\"><p>"+data+"</p>" +
-        "<time datetime=\"2009-11-13T20:00\">"+user+" at "+time+"</time></div></div></div>";
+        "<div class=\"col-md-10 col-xs-10\"><div class=\"messages msg_receive\"><p>" + data + "</p>" +
+        "<time datetime=\"2009-11-13T20:00\">" + user + " at " + time + "</time></div></div></div>";
     return base_receive;
 }
 
-function createPopup(friend){
-    var popup_id = "qnimate"+friend;
-    var popup = "<div class=\"popup-box chat-popup\" id=\""+popup_id+"\">" +
+function createPopup(friend) {
+    var popup_id = "qnimate" + friend;
+    var popup = "<div class=\"popup-box chat-popup\" id=\"" + popup_id + "\">" +
         "<div class=\"row chat-window col-xs-5 col-md-3\">" +
         "<div class=\"panel panel-default\"><div class=\"panel-heading top-bar\"><div class=\"col-md-8 col-xs-8\">" +
         "<h3 class=\"panel-title\"><span class=\"glyphicon glyphicon-comment\">" +

@@ -1,27 +1,24 @@
 <div class="row">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div style="float: left; margin-left: 30px;font-size: large">Timeline</div>
-        <div class="input-group" style="width: 40%; float: right; margin: 0 30px 30px 0">
+        <div class="timelineStyle">Timeline</div>
+        <div class="input-group searchStyle">
             <span class="input-group-addon">
                 <i class="glyphicon glyphicon-search"></i>
             </span>
-            <input type="text" ng-model="query" class="form-control" placeholder="Search"/>
+            <input type="text" ng-model="query" class="form-control" placeholder="Search" />
         </div>
     </section>
     <!-- Main content -->
-    <section class="content" style="margin:50px 30px 0 30px;">
+    <section class="content itemsContent">
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
                 <!-- The time line -->
                 <div ng-show="lostCount==0">
-                    <div class="alert alert-info" role="alert">Nothing's been lost yet!</div> <!--style="padding: 10px 0 10px 0;"-->
+                    <div class="alert alert-info" role="alert">Nothing's been lost yet!</div>
                 </div>
                 <ul class="timeline">
-                    <!-- timeline time label -->
-
-                    <!-- /.timeline-label -->
                     <!-- timeline item -->
                     <li ng-repeat="item in lostitems | orderBy:'-date_posted' | filter: query " id="{{item._id}}">
                         <i class="fa fa-comments bg-yellow"></i>

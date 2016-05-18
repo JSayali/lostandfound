@@ -1,6 +1,12 @@
-var mongoose=require('mongoose');
+// Client-side code
+/* jshint browser: true, jquery: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, trailing    : true */
+// Server-side code
+/* jshint node: true, curly: true, eqeqeq: true, forin: true, immed: true, indent: 4, latedef: true, newcap: true, nonew: true, quotmark: double, undef: true, unused: true, strict: true, trailing: true */
+"user strict";
 
-Users=mongoose.model('Users');
+var mongoose=require("mongoose");
+
+var Users=mongoose.model("Users");
 
 
 exports.register=function(req,res){
@@ -43,4 +49,3 @@ exports.editProfile=function(req,res){
             }
         });
 }
-
