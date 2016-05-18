@@ -26,6 +26,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/jquery.slidepanel.css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="stylesheets/pop-up.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
     <!-- jQuery 2.2.0 -->
     <script src="libraries/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 
@@ -40,11 +41,11 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini" ng-controller="lostandfoundController">
 <div ng-include src="content" include-replace ></div>
-<div id='slider' ng-model="id" style="padding:40px 10px 0 10px; border:1px inset darkgray;background-color:#ecf0f5">
+<div id='slider' ng-model="id">
     <div><b>Please fill out the form to add information about item lost/found at {{id}}</b></div>
     <hr>
     <form name="detailsForm">
-        <fieldset class="form-group" style="padding-top: 10px;">
+        <fieldset class="form-group">
             <label for="name">What's the item ?</label>
             <input type="text" class="form-control" id="name" ng-model="name" maxlength="20" placeholder="Enter Name" required>
         </fieldset>
@@ -84,17 +85,17 @@
             <span ng-show="detailsForm.lf.$error.required && detailsForm.lf.$dirty">Required</span>
         </div>
 
-        <div style="margin-top: 30px;">
-            <button id="formSubmit" type="submit" class="btn btn-primary" style="margin: 0 10px 0 30px;" ng-disabled="!detailsForm.$valid">Submit</button>
-            <button class="btn btn-primary" style="margin: 0 20px 0 10px;" id="cancelForm">Cancel</button>
+        <div class="formFooter">
+            <button id="formSubmit" type="submit" class="btn btn-primary" ng-disabled="!detailsForm.$valid">Submit</button>
+            <button class="btn btn-primary" id="cancelForm">Cancel</button>
         </div>
 
 
-        <button type="reset" value="Reset" id="reset" style="display:none">Reset</button>
+        <button type="reset" value="Reset" id="reset">Reset</button>
     </form>
 </div>
 <div id="popups"></div>
-<button id='trigger' style="display:none">Trigger</button>
+<button id='trigger'>Trigger</button>
 <button class="hide" id="addClass">Hidden</button>
 
 

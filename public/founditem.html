@@ -2,8 +2,6 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div style="float: left; margin-left: 30px;font-size: large">Timeline</div>
-        <!--<div style="float: left; margin-left: 30px;"><h3>Timeline</h3></div>-->
-        <!--<input ng-model="query" placeholder="Search" style="width: 30%; float: right; margin: 0 30px 30px 0">-->
         <div class="input-group" style="width: 40%; float: right; margin: 0 30px 30px 0">
             <span class="input-group-addon">
                 <i class="glyphicon glyphicon-search"></i>
@@ -21,16 +19,13 @@
                     <div class="alert alert-info" role="alert">Nothing's been found yet!</div>
                 </div>
                 <ul class="timeline">
-                    <!-- timeline time label -->
-
-                    <!-- /.timeline-label -->
                     <!-- timeline item -->
                     <li ng-repeat="item in founditems | orderBy:'-date_posted' | filter: query" id="{{item._id}}">
                         <i class="fa fa-comments bg-yellow"></i>
                         <div class="timeline-item">
                             <span class="time"><i class="fa fa-clock-o"></i> {{item.date_formated}}</span>
                             <h3 class="timeline-header">{{item.user}} found {{item.name}} at {{item.location}}</h3>
-                            <div class="timeline-body">
+                            <div class="timeline-body textOverflow">
                                 <div><em>Item Description: {{item.description}}</em></div>
                                 <div><em>Found on {{item.date}}</em></div>
                             </div>

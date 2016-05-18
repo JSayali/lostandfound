@@ -15,11 +15,11 @@ exports.login=function(req,res) {
       if (err) { console.log(err); }
       // Return if user not found in database
       if (!user) {
-          message="No users found";
+          message="Please check your username";
           status=403;
       }
       else if (user.password!==req.body.password) {
-            message="Please Enter Correct Password";
+            message="Please enter correct password";
             status=403;
       }
       else
@@ -43,7 +43,7 @@ exports.checkSession=function(req,res)
         res.json({message:data});
     } else 
     {
-        res.json(403,{message:"Please Login"});
+        res.json(403,{message:"Please login"});
     }
 
 }
