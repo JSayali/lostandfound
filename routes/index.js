@@ -22,7 +22,6 @@ module.exports=function(app,passport){
     app.post("/editProfile",users.editProfile);
     app.get("/getAllLostItems",lostandfound.getAllLostItems);
     app.get("/getAllFoundItems",lostandfound.getAllFoundItems);
-    app.post("/updateLikes", users.updateLikes);
     app.post("/postDelete", lostandfound.postDelete);
 }
 

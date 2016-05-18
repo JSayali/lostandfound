@@ -32,9 +32,6 @@
                             <div class="timeline-footer">
                                 <button ng-hide="item.user==username" class="btn btn-warning btn-flat btn-xs contact">Contact <span>{{item.user}}</span></button>
                                 <button ng-show="item.user==username" class="btn btn-warning btn-flat btn-xs" ng-click="postDelete(item._id)" data-toggle="tooltip" data-placement="bottom" title="Delete this post">Returned to the owner</button>
-                                <a class="postStar" href="#" ng-model="item.star" ng-click="update(item._id); item.star=!item.star;">
-                                    <i ng-class="{'fa fa-heart':item.star,'fa fa-heart-o':!item.star}"></i>
-                                </a>
                             </div>
                         </div>
                     </li>

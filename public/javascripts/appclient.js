@@ -1,7 +1,7 @@
 'use strict';
-var app = angular.module('lostandfoundapp',[]);
+var app = angular.module('lostandfoundapp',["ngStorage"]);
 
-app.controller('lostandfoundController', ['$scope', '$http', '$window', function($scope, $http) {
+app.controller('lostandfoundController', ['$scope', '$http', '$window', function($scope, $http, $localStorage) {
 
     var socket = io();
 
@@ -42,13 +42,13 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
 
     };
 
+    //console.log("user: "+$localStorage.username);
 
     $http.get('/checkSession')
         .success(function(data, status, headers, config) {
             data = data["message"];
-            $scope.likes = data.likes;
+            /*$scope.likes = data.likes;*/
             $scope.username = data.user_name;
-            console.log("likes: "+$scope.likes);
             $scope.content = "/profile.html";
 
         })
@@ -70,7 +70,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             });
 
     };
-    $scope.update = function(id){
+    /*$scope.update = function(id){
 
         var data ={
             id: id,
@@ -80,7 +80,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             .success(function(data){
                 console.log(data);
             });
-    };
+    };*/
     $scope.login = function() {
 
         var data = {
@@ -93,19 +93,19 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             data = data["message"];
 
             $scope.username = data.user_name;
-            $scope.likes = data.likes;
+            /*$scope.likes = data.likes;*/
 
             socket.emit('onlineuser', $scope.username, function (data) {
             });
             $scope.content = "/profile.html";
-            updateFoundStars();
-            updateLostStars();
+            /*updateFoundStars();
+            updateLostStars();*/
 
         }).error(function(data, status, headers, config) {
             $.notify(data.message, "alert");
         });
     };
-    function updateLostStars(){
+    /*function updateLostStars(){
         ($scope.lostitems).forEach(function(d){
             if(($scope.likes).indexOf(d._id)!==-1){
                 d.star = true;
@@ -126,7 +126,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             }
         });
         $scope.founditems = $scope.founditems;
-    }
+    }*/
     $scope.register = function() {
 
         var uname = $("#email").val();
@@ -192,7 +192,7 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
             $scope.pageTitle = "Campus Map";
         }
         $scope.university = page;
-    }
+    };
     $("body").delegate(".send-chat", "click", function(e){
 
         var to = $(this).parent().parent().parent().siblings(".top-bar").find("span.user").html();
@@ -340,8 +340,8 @@ app.controller('lostandfoundController', ['$scope', '$http', '$window', function
         html += "<div class='timeline-body'>" + msg.description + "</div><div class='timeline-footer'><button ng-hide='username==user' " +
             "class='btn btn-warning btn-flat btn-xs contact'>";
         html += "Contact <span>" + msg.user + "</span></button>";
-        html += "<a class='postStar' href='#' ng-model='item.star' ng-click='update(item._id); item.star=!item.star;'>";
-        html += "<i ng-class='{'fa fa-heart':item.star,'fa fa-heart-o':!item.star}'></i></a></div></div></li>";
+       /* html += "<a class='postStar' href='#' ng-model='item.star' ng-click='update(item._id); item.star=!item.star;'>";
+        html += "<i ng-class='{'fa fa-heart':item.star,'fa fa-heart-o':!item.star}'></i></a></div></div></li>";*/
 
         $(".timeline").prepend(html);
         $(".timeline :first-child").slideDown();
@@ -408,7 +408,6 @@ $(document).ready(function() {
         trigger: $("#trigger"),
         position: "right"
     });
-
 });
 
 function createBase_sent(data, user){

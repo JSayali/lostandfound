@@ -26,7 +26,7 @@ exports.register=function(req,res){
             }
         });
 }
-exports.updateLikes = function(req, res){
+/*exports.updateLikes = function(req, res){
     console.log(req.body.id);
     console.log(req.body.user);
     Users.update({
@@ -67,7 +67,7 @@ exports.updateLikes = function(req, res){
             }
         });
 
-}
+}*/
 exports.editProfile=function(req,res){
 
     Users.findOne({user_name: req.body.username })

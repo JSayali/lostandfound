@@ -1,12 +1,11 @@
 body, h3, h1, h2, .logoStyle {
-    /*padding: 50px;*/
-    /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
     font-family: 'Anton', sans-serif;
 }
 
-/*a {
-    color: #00B7FF;
-}*/
+.uhStyle {
+    height: 50%;
+}
+
 .textOverflow {
     word-wrap:break-word;
 }
