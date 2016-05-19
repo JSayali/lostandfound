@@ -53,6 +53,7 @@ app.controller("lostandfoundController", ["$scope", "$http", "$window", function
 
     $scope.editProfile = function() {
         $scope.university = "/editProfile.html";
+        $scope.pageTitle = "Edit Profile";
     };
 
     $http.get("/checkSession")
