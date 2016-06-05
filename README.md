@@ -1,4 +1,4 @@
-# [lostandfound](http://csuf-lostandfound.herokuapp.com/)
+# Lost & Found
 CPSC 473-03 Project 2 
 
 Take a look at it - [Lost & Found](http://csuf-lostandfound.herokuapp.com/)
